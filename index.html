@@ -323,14 +323,38 @@
     // CACHE BUSTING HELPER
     const getFreshUrl = (url) => url + (url.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
 
+    // UPDATED ROUTER: USES HASH ROUTING FOR GITHUB PAGES COMPATIBILITY
     const app = {
-        init: () => { app.fetchData(); app.checkActiveAlerts(); app.handleRoute(); window.addEventListener('popstate', app.handleRoute); SIMA.init(); },
-        router: (p) => { history.pushState({},"",p); app.handleRoute(); },
+        init: () => { 
+            app.fetchData(); 
+            app.checkActiveAlerts(); 
+            window.addEventListener('hashchange', app.handleRoute); // Listen for hash changes
+            window.addEventListener('load', app.handleRoute); // Check hash on load
+            SIMA.init(); 
+        },
+        router: (p) => { 
+            // Convert slash paths to hash paths (e.g., /outlook -> #/outlook)
+            window.location.hash = p; 
+        },
         handleRoute: () => {
-            const p = window.location.pathname; let id='page-home';
-            if(p.includes('outlook')) id='page-outlook'; else if(p.includes('storm')) id='page-storm'; else if(p.includes('snow')) id='page-snow'; else if(p.includes('radar')) id='page-radar'; else if(p.includes('alert')) id='page-alerts'; else if(p.includes('drought')) id='page-drought'; else if(p.includes('about')) id='page-about';
-            document.querySelectorAll('.page').forEach(e=>e.classList.remove('active')); document.getElementById(id).classList.add('active');
-            document.getElementById('mm').classList.remove('open'); window.scrollTo(0,0);
+            // Get the current hash (default to 'home' if empty)
+            const hash = window.location.hash || '#/';
+            let id = 'page-home';
+            
+            if(hash.includes('outlook')) id='page-outlook'; 
+            else if(hash.includes('storm')) id='page-storm'; 
+            else if(hash.includes('snow')) id='page-snow'; 
+            else if(hash.includes('radar')) id='page-radar'; 
+            else if(hash.includes('alert')) id='page-alerts'; 
+            else if(hash.includes('drought')) id='page-drought'; 
+            else if(hash.includes('about')) id='page-about';
+
+            document.querySelectorAll('.page').forEach(e=>e.classList.remove('active')); 
+            const el = document.getElementById(id);
+            if(el) el.classList.add('active');
+            
+            document.getElementById('mm').classList.remove('open'); 
+            window.scrollTo(0,0);
         },
         checkActiveAlerts: async () => {
             let count = 0;
@@ -494,7 +518,6 @@
       const lats = towns.map(l => l.lat).join(',');
       const lngs = towns.map(l => l.lng).join(',');
       
-      // We also apply cache busting to Open-Meteo here to ensure the core data is fresh
       const url = getFreshUrl(`https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lngs}&current=temperature_2m,precipitation,wind_gusts_10m,wind_speed_10m,wind_direction_10m,weather_code,relative_humidity_2m,apparent_temperature&hourly=temperature_2m,wind_gusts_10m,precipitation,weather_code,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=Pacific%2FAuckland`);
 
       fetch(url).then(r => r.json()).then(data => {
