@@ -7,10 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Branding Colors based on your logo */
+            /* Branding Colors */
             --brand-dark: #0f2b46;
             --brand-blue: #1c6ba0;
-            --brand-light: #f0f9ff;
             --text-main: #334155;
         }
 
@@ -47,7 +46,8 @@
 
         /* Main Card Container */
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            /* Changed to solid white to match logo background seamlessly */
+            background: #ffffff;
             width: 100%;
             max-width: 500px;
             padding: 3rem 2.5rem;
@@ -62,13 +62,18 @@
         /* Logo Styling */
         .logo-container {
             margin-bottom: 2rem;
+            /* Flex center ensures the logo sits perfectly in the middle */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .logo-container img {
-            height: 100px; /* Adjust size as needed */
+            height: 100px; 
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            /* Removing drop-shadow here helps blend the edges if the logo has a white background */
+            display: block;
         }
 
         h1 {
@@ -139,7 +144,7 @@
 
     <div class="card">
         <div class="logo-container">
-            <!-- REPLACE 'logo.png' WITH YOUR ACTUAL IMAGE FILENAME -->
+            <!-- Ensure your logo file is named correctly -->
             <img src="logo.png" alt="South Island Met Agency Logo">
         </div>
 
@@ -151,11 +156,14 @@
         </p>
 
         <p>
-            During this time, our website and data services will be offline for scheduled maintenance.
+            During this time, no manual forecasts will be made by our forecasters. 
+            Computer generated forecasts & our Radar page will be available.
         </p>
 
         <div class="status-box">
-            <span class="status-label">System Online Estimate</span>
+            <span class="status-label">Manual Forecasts Resuming</span>
+            <!-- I kept the date from your previous request, but since it is a Christmas notice, 
+                 you might want to change "October" to "January" in your text editor. -->
             <div class="status-date">Before 9:00 PM<br>October 2nd</div>
         </div>
 
